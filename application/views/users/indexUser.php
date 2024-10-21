@@ -55,7 +55,7 @@
         <p>No users found.</p>
     <?php endif; ?>
 </div>
-<<<<<<< HEAD
+
 
 <!-- _________________ -->
 <?php if($this->session->flashdata('success_msg')): ?>
@@ -78,31 +78,6 @@
     </script>
 <?php endif; ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- __________Add Student______________________________________________________________________________________ --> 
 <div class="modal fade" id="studentAddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -111,10 +86,12 @@
             <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="saveStudent">
+        <form id="saveStudent"  method="post" enctype="multipart/form-data">
             <div class="modal-body">
 
-                <div id="errorMessage" class="alert alert-warning d-none"></div>
+                <!-- <div id="errorMessage" class="alert alert-warning d-none"></div> -->
+                <div class="alert alert-warning" id="errorMessage"></div>
+
 
                 <div class="mb-3">
                     <label for="">Name</label>
@@ -146,56 +123,82 @@
     </div>
 </div>
 <!-- ________________________________________________________________________________________________ -->
-
-
 <script>
-        $(document).on('submit', '#saveStudent', function (e) {
-            e.preventDefault();
+    // Add user
+    $(document).on('submit', '#saveStudent', function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
 
-            var formData = new FormData(this);
-            formData.append("save_student", true);
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('users/add'); ?>",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    $('#studentAddModal').modal('hide');
+                    $('#saveStudent')[0].reset();
+                    $('#myTable').load(location.href + " #myTable");
+                } else {
+                    $('#errorMessage').removeClass('d-none').text(response.error);
+                }
+            },
+            error: function () {
+                alert('Error occurred while adding user.');
+            }
+        });
+    });
+
+    // Edit user
+    $(document).on('submit', '#editStudent', function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('users/edit'); ?>",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    $('#studentEditModal').modal('hide');
+                    $('#editStudent')[0].reset();
+                    $('#myTable').load(location.href + " #myTable");
+                } else {
+                    $('#errorMessage').removeClass('d-none').text(response.error);
+                }
+            },
+            error: function () {
+                alert('Error occurred while editing user.');
+            }
+        });
+    });
+
+    // Delete user
+    $(document).on('click', '.deleteUser', function () {
+        var userId = $(this).data('id');
+
+        if (confirm('Are you sure you want to delete this user?')) {
             $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url('user/insert'); ?>",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        // Handle response
+                type: "POST",
+                url: "<?php echo base_url('users/delete'); ?>/" + userId,
+                success: function (response) {
+                    if (response.success) {
+                        $('#myTable').load(location.href + " #myTable");
+                    } else {
+                        alert('Error occurred while deleting user.');
                     }
-        });
-
-
-            // $.ajax({
-            //     type: "POST",
-            //     base_url: "user/insert($data)",
-            //     data: formData,
-            //     processData: false,
-            //     contentType: false,
-            //     success: function (response) {
-                    
-            //         var res = jQuery.parseJSON(response);
-            //         if(res.status == 422) {
-            //             $('#errorMessage').removeClass('d-none');
-            //             $('#errorMessage').text(res.message);
-
-            //         }else if(res.status == 200){
-            //             $('#errorMessage').addClass('d-none');
-            //             $('#studentAddModal').modal('hide');
-            //             $('#saveStudent')[0].reset();
-
-            //             alertify.set('notifier','position', 'top-right');
-            //             alertify.success(res.message);
-
-            //             $('#myTable').load(location.href + " #myTable");
-
-            //         }else if(res.status == 500) {
-            //             alert(res.message);
-            //         }
-            //     }
-            // });
-        });
+                },
+                error: function () {
+                    alert('Error occurred while deleting user.');
+                }
+            });
+        }
+    });
 </script>
+
 
 
 

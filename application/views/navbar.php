@@ -37,6 +37,9 @@
                     <a class="nav-link" href="<?php echo base_url('users/index'); ?>">Image CRUD</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url('Student/index'); ?>">Student CRUD</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
                 <li class="nav-item">

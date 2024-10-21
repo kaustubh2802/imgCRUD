@@ -20,7 +20,7 @@ class Users extends CI_Controller
 
     
     //get data from views/users/add.php and send it to the database
-    function add(){
+    function add(){ 
         if($this->input->post('userSubmit')){
             
             //Check whether user upload picture
@@ -54,6 +54,14 @@ class Users extends CI_Controller
             
             //Pass user data to model
             $insertUserData = $this->user->insert($userData);
+            
+            if ($insertUserData) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Failed to insert data']);
+            }
+
+            
             
             if($insertUserData){
                 $this->session->set_flashdata('success_msg', 'User data have been added successfully.');
