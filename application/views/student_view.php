@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css"> -->
     <title>Student Management System</title>
     <?php require('navbar.php');?>
 </head>
@@ -117,9 +117,9 @@
                        contentType: false,
                        processData: false,
                        success: function(response) {
-                           $('#addModal').modal('hide');
                            loadStudents();
                            alert('Student added successfully!');
+                           $('#addModal').modal('hide');
                        }
                    });
                });
