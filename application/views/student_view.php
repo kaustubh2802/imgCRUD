@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    
     <title>Student Management System</title>
     <?php require('navbar.php');?>
 </head>
@@ -15,33 +21,35 @@
     </div>
 
     <!-- Add Modal -->
-    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add Student</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addForm">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="photo" class="form-label">Photo</label>
-                            <input type="file" class="form-control" id="photo" name="photo" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </form>
-                </div>
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addForm"> 
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Photo</label>
+                        <input type="file" class="form-control" id="photo" name="photo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -73,9 +81,9 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script> -->
     <script>
         $(document).ready(function() {
             loadStudents();
@@ -91,6 +99,7 @@
                         students.forEach(student => {
                             rows += `
                                 <tr>
+                                    <td>${student.id}</td>
                                     <td>${student.name}</td>
                                     <td>${student.email}</td>
                                     <td><img src="<?= base_url('uploads/') ?>${student.photo}" width="50" alt="photo"></td>
@@ -101,13 +110,17 @@
                                 </tr>
                             `;
                         });
-                        $('#studentTable').html(`<table class="table"><thead><tr><th>Name</th><th>Email</th><th>Photo</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>`);
+                        $('#studentTable').html(`
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr><th>ID</th><th>Name</th><th>Email</th><th>Photo</th><th>Actions</th></tr>
+                        </thead><tbody>${rows}</tbody></table>`); 
                     }
                 });
             }
 
                          // Add Student AJAX
-                         $('#addForm').on('submit', function(e) {
+             $('#addForm').on('submit', function(e) {
                    e.preventDefault();
                    let formData = new FormData(this);
                    $.ajax({
@@ -117,12 +130,34 @@
                        contentType: false,
                        processData: false,
                        success: function(response) {
-                           loadStudents();
+                        //    loadStudents();
                            alert('Student added successfully!');
                            $('#addModal').modal('hide');
+                           $('editName').val('');
+                           $('editEmail').val('');
+                           $('editPhoto').val('');
+
+                           //startOf-sweetAlert
+                           const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                            });
+                            Toast.fire({
+                            icon: "success",
+                            title: "Signed in successfully"
+                            });
+                            // EndOf-sweetAlert
                        }
                    });
-               });
+               }); 
+
 
                // Edit Student AJAX
                $(document).on('click', '.editBtn', function() {
@@ -153,6 +188,9 @@
                        success: function(response) {
                            $('#editModal').modal('hide');
                            loadStudents();
+                        //    sweetalert2
+                        Swal.fire("Data Updated Successfully!");
+
                            alert('Student updated successfully!');
                        }
                    });
@@ -167,6 +205,12 @@
                            type: 'GET',
                            success: function(response) {
                                loadStudents();
+
+                               Swal.fire({
+                                    title: "Good job!",
+                                    text: "You clicked the button!",
+                                    icon: "success"
+                                    });
                                alert('Student deleted successfully!');
                            }
                        });

@@ -47,25 +47,7 @@ class Student extends CI_Controller {
     public function delete_student($id) {
         $this->Student_model->delete_student($id);
         echo json_encode(['status' => true]);
-    }
-
-    // private function upload_image() {
-        // Implement file upload logic here
-        // Return image path if upload successful
-    // }
-    // private function upload_image() {
-    //     $config['upload_path'] = './uploads/';
-    //     $config['allowed_types'] = 'gif|jpg|png|jpeg';
-    //     $config['max_size'] = 2048; // 2MB
-    //     $this->load->library('upload', $config);
-    
-    //     if ($this->upload->do_upload('photo')) {
-    //         return 'uploads/' . $this->upload->data('file_name');
-    //     } else {
-    //         // return 'uploads/default.jpg'; // return a default image if upload fails
-    //         return 'uploads/default.jpg'; // return a default image if upload fails
-    //     }
-    // }
+    } 
     private function upload_image() {
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
