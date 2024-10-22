@@ -10,14 +10,21 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     
-    <title>Student Management System</title>
-    <?php require('navbar.php');?>
+    <title>Client Management System</title>
+    
+    <?php require(__DIR__ . '/../navbar.php'); ?>
+
+    <!-- < ?php require(base_url('views/navbar.php')); ?> -->
+
+    <?php //require('navbar.php');?>
+    <!-- < ?php require_once(base_url()); ?> -->
+    <!-- < ?php require('navbar.php');?> -->
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Student Management System</h1>
+        <h1 class="mt-5">Client Management System</h1>
         <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModal">Add Student</button>
-        <div id="studentTable" class="mt-3"></div>
+        <div id="clientTable" class="mt-3"></div>
     </div>
 
     <!-- Add Modal -->
@@ -26,14 +33,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Add Student</h5>
+                <h5 class="modal-title" id="addModalLabel">New Client</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addForm"> 
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <label for="username" class="form-label">User Name</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -92,29 +103,30 @@
             // Load students function
             function loadStudents() {
                 $.ajax({
-                    url: '<?= base_url("student/fetch_students") ?>',
+                    url: '<?= base_url("client/fetch_clients") ?>',
                     type: 'GET',
                     success: function(data) {
-                        const students = JSON.parse(data);
+                        const client = JSON.parse(data);
                         let rows = '';
-                        students.forEach(student => {
+                        client.forEach(cli => {
                             rows += `
                                 <tr>
-                                    <td>${student.id}</td>
-                                    <td>${student.name}</td>
-                                    <td>${student.email}</td>
-                                    <td><img src="<?= base_url('uploads/') ?>${student.photo}" width="50" alt="photo"></td>
+                                    <td>${cli.id}</td>
+                                    <td>${cli.username}</td>
+                                    <td>${cli.password}</td>
+                                    <td>${cli.email}</td>
+                                    <td><img src="<?= base_url('uploads/') ?>${cli.photo}" width="50" alt="photo"></td>
                                     <td>
-                                        <button class="btn btn-warning editBtn" data-id="${student.id}">Edit</button>
-                                        <button class="btn btn-danger deleteBtn" data-id="${student.id}">Delete</button>
+                                        <button class="btn btn-warning editBtn" data-id="${cli.id}">Edit</button>
+                                        <button class="btn btn-danger deleteBtn" data-id="${cli.id}">Delete</button>
                                     </td>
                                 </tr>
                             `;
                         });
-                        $('#studentTable').html(`
+                        $('#clientTable').html(`
                         <table class="table table-bordered table-hover">
                         <thead>
-                        <tr><th>ID</th><th>Name</th><th>Email</th><th>Photo</th><th>Actions</th></tr>
+                        <tr><th>ID</th><th>User Name</th><th>Password</th><th>Email</th><th>Photo</th><th>Actions</th></tr>
                         </thead><tbody>${rows}</tbody></table>`); 
                     }
                 });
@@ -125,18 +137,19 @@
                    e.preventDefault();
                    let formData = new FormData(this);
                    $.ajax({
-                       url: '<?= base_url("student/insert_student") ?>',
+                       url: '<?= base_url("client/insert_client") ?>',
                        type: 'POST',
                        data: formData,
                        contentType: false,
                        processData: false,
                        success: function(response) {
-                        //    loadStudents();
-                           alert('Student added successfully!');
+                           loadStudents();
+                           alert('client added successfully!');
+                           $('#username').val(''); 
+                           $('#password').val(''); 
+                           $('#email').val('');
+                           $('#photo').val('');
                            $('#addModal').modal('hide');
-                           $('editName').val('');
-                           $('editEmail').val('');
-                           $('editPhoto').val('');
 
                            //startOf-sweetAlert
                            const Toast = Swal.mixin({
@@ -171,8 +184,7 @@
                            $('#editId').val(student.id);
                            $('#editName').val(student.name);
                            $('#editEmail').val(student.email);
-                           $('#editPhoto').val(student.photo);
-                        //    $('#editPhoto').val('');
+                           $('#editPhoto').val('');
                            $('#editModal').modal('show');
                        }
                    });
