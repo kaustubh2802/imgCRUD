@@ -12,13 +12,7 @@
     
     <title>Client Management System</title>
     
-    <?php require(__DIR__ . '/../navbar.php'); ?>
-
-    <!-- < ?php require(base_url('views/navbar.php')); ?> -->
-
-    <?php //require('navbar.php');?>
-    <!-- < ?php require_once(base_url()); ?> -->
-    <!-- < ?php require('navbar.php');?> -->
+    <?php require(__DIR__ . '/../navbar.php'); ?> 
 </head>
 <body>
     <div class="container">
@@ -71,34 +65,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editForm">
+                    <form id="editForm">  
+  
                         <input type="hidden" id="editId" name="id">
                         <div class="mb-3">
                             <label for="editUserame" class="form-label">Name</label>
                             <input type="text" class="form-control" id="editUserame" name="username" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editPassword" class="form-label">Email</label>
+                            <label for="editPassword" class="form-label">Password</label>
                             <input type="password" class="form-control" id="editPassword" name="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="editEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="editEmail" name="email" required>
                         </div>
-                        <div class="mb-3">
+                        <!-- ___________________________________________ -->
+                        <!-- <div class="mb-3">
                             <label for="editPhoto" class="form-label">Photo</label>
                             <input type="file" class="form-control" id="editPhoto" name="photo">
+                        </div> -->
+                        <div class="mb-3">
+                            <label for="editPhoto" class="form-label">Upload New Photo (Optional)</label>
+                            <input type="file" class="form-control" id="editPhoto" name="photo">
                         </div>
+                        <div class="mb-3">
+                            <label for="editPhoto" class="form-label">Current Photo</label><br>
+                            <img id="editPhotoPreview" src="" alt="Current photo" width="100">
+                        </div>  
+
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script> -->
+    
 
     <script>
         $(document).ready(function() {
@@ -190,9 +192,12 @@
                            $('#editPassword').val(cc.password);
                            $('#editEmail').val(cc.email);  
                            // Set the photo field with the filename (if you have it stored)
-                            if (cc.photo) {
-                                $('#editPhoto').after(`<p>Current photo: ${cc.photo}</p>`);
-                            }
+                            // if (cc.photo) {
+                            //     $('#editPhoto').after(`<p>Current photo: ${cc.photo}</p>`);
+                            // }
+                            // ------------------------
+                            $('#editPhotoPreview').attr('src', '<?= base_url("uploads/") ?>' + cc.photo); // Display the current photo
+            
                            $('#editModal').modal('show');
                        }
                    });
@@ -202,7 +207,7 @@
                    e.preventDefault();
                    let formData = new FormData(this);
                    $.ajax({
-                       url: '<?= base_url("student/update_student") ?>',
+                       url: '<?= base_url("client/update_client") ?>',
                        type: 'POST',
                        data: formData,
                        contentType: false,
@@ -214,7 +219,7 @@
                         
                         Swal.fire("Data Updated Successfully!");
 
-                           alert('Student updated successfully!');
+                           alert('client updated successfully!');
                        }
                    });
                });

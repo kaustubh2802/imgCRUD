@@ -37,16 +37,34 @@ class Client extends CI_Controller {
         echo json_encode($data);
     }
 
+    // public function update_client() {
+    //     $id = $this->input->post('id');
+    //     $data = [
+    //         'name' => $this->input->post('name'),
+    //         'email' => $this->input->post('email'),
+    //         'photo' => $this->upload_image()
+    //     ];
+    //     $this->Student_model->update_student($id, $data);
+    //     echo json_encode(['status' => true]);
+    // }
     public function update_client() {
         $id = $this->input->post('id');
         $data = [
-            'name' => $this->input->post('name'),
+            'username' => $this->input->post('username'),
+            'password' => $this->input->post('password'),
             'email' => $this->input->post('email'),
-            'photo' => $this->upload_image()
-        ];
-        $this->Student_model->update_student($id, $data);
+        ];    
+        // Check if a new photo is uploaded
+        if (!empty($_FILES['photo']['name'])) // Upload new image if provided    
+        {   $data['photo'] = $this->upload_image();    }        
+        // Update client with new data (and possibly new image)
+        $this->client_model->update_client($id, $data);
         echo json_encode(['status' => true]);
     }
+
+    
+
+
 
     public function delete_student($id) {
         $this->Student_model->delete_student($id);
@@ -55,6 +73,18 @@ class Client extends CI_Controller {
 
 
 
+    // private function upload_image() {
+    //     $config['upload_path'] = './uploads/';
+    //     $config['allowed_types'] = 'gif|jpg|png|jpeg';
+    //     $config['max_size'] = 2048; // 2MB
+    //     $this->load->library('upload', $config);
+    
+    //     if ($this->upload->do_upload('photo')) {
+    //         return $this->upload->data('file_name'); // only return the filename
+    //     } else {
+    //         return 'default.jpg'; // return a default image if upload fails
+    //     }
+    // }
     private function upload_image() {
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -67,5 +97,6 @@ class Client extends CI_Controller {
             return 'default.jpg'; // return a default image if upload fails
         }
     }
+    
     
 }
