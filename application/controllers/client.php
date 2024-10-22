@@ -66,8 +66,8 @@ class Client extends CI_Controller {
 
 
 
-    public function delete_student($id) {
-        $this->Student_model->delete_student($id);
+    public function delete_client($id) {
+        $this->client_model->delete_client($id);
         echo json_encode(['status' => true]);
     } 
 

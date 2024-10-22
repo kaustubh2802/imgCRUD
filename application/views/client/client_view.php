@@ -115,6 +115,7 @@
                         const client = JSON.parse(data);
                         let rows = '';
                         client.forEach(cli => {
+                            // <button class="btn btn-danger deleteBtn" data-id="$ {cli.id}">Delete</button>
                             rows += `
                                 <tr>
                                     <td>${cli.id}</td>
@@ -124,7 +125,7 @@
                                     <td><img src="<?= base_url('uploads/') ?>${cli.photo}" width="50" alt="photo"></td>
                                     <td>
                                         <button class="btn btn-warning editBtn" data-id="${cli.id}">Edit</button>
-                                        <button class="btn btn-danger deleteBtn" data-id="${cli.id}">Delete</button>
+                                        <button class="btn btn-danger deleteBtn" data-id="${cli.id}" data-name="${cli.username}">Delete</button>
                                     </td>
                                 </tr>
                             `;
@@ -224,22 +225,23 @@
                    });
                });
 
-               // Delete Student AJAX
+               // Delete client AJAX
                $(document).on('click', '.deleteBtn', function() {
-                   const studentId = $(this).data('id');
-                   if (confirm('Are you sure you want to delete this student?')) {
+                   const cliId = $(this).data('id');
+                   const cliName = $(this).data('name'); // Get the client name from the data attribute
+                   if (confirm('Are you sure you want to delete this client?')) {
                        $.ajax({
-                           url: '<?= base_url("student/delete_student/") ?>' + studentId,
+                           url: '<?= base_url("client/delete_client/") ?>' + cliId,
                            type: 'GET',
                            success: function(response) {
                                loadStudents();
 
                                Swal.fire({
                                     title: "Good job!",
-                                    text: "You clicked the button!",
+                                    text: `${cliName} has been successfully deleted!`,
                                     icon: "success"
                                     });
-                               alert('Student deleted successfully!');
+                                    alert(`${cliName} has been successfully deleted!`);
                            }
                        });
                    }
