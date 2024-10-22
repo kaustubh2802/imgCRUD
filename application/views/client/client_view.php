@@ -74,8 +74,12 @@
                     <form id="editForm">
                         <input type="hidden" id="editId" name="id">
                         <div class="mb-3">
-                            <label for="editName" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="editName" name="name" required>
+                            <label for="editUserame" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editUserame" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Email</label>
+                            <input type="password" class="form-control" id="editPassword" name="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="editEmail" class="form-label">Email</label>
@@ -132,7 +136,7 @@
                 });
             }
 
-                         // Add Student AJAX
+            // Add Student AJAX
              $('#addForm').on('submit', function(e) {
                    e.preventDefault();
                    let formData = new FormData(this);
@@ -175,16 +179,20 @@
 
                // Edit Student AJAX
                $(document).on('click', '.editBtn', function() {
-                   const studentId = $(this).data('id');
+                   const cliID = $(this).data('id');
                    $.ajax({
-                       url: '<?= base_url("student/get_student/") ?>' + studentId,
+                       url: '<?= base_url("client/get_client/") ?>' + cliID,
                        type: 'GET',
                        success: function(data) {
-                           const student = JSON.parse(data);
-                           $('#editId').val(student.id);
-                           $('#editName').val(student.name);
-                           $('#editEmail').val(student.email);
-                           $('#editPhoto').val('');
+                           const cc = JSON.parse(data);
+                           $('#editId').val(cc.id);
+                           $('#editUserame').val(cc.username);
+                           $('#editPassword').val(cc.password);
+                           $('#editEmail').val(cc.email);  
+                           // Set the photo field with the filename (if you have it stored)
+                            if (cc.photo) {
+                                $('#editPhoto').after(`<p>Current photo: ${cc.photo}</p>`);
+                            }
                            $('#editModal').modal('show');
                        }
                    });

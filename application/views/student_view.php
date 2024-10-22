@@ -171,7 +171,7 @@
                            $('#editId').val(student.id);
                            $('#editName').val(student.name);
                            $('#editEmail').val(student.email);
-                           $('#editPhoto').val(student.photo);
+                        //    $('#editPhoto').val(student.photo);
                         //    $('#editPhoto').val('');
                            $('#editModal').modal('show');
                        }

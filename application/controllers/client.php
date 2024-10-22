@@ -32,7 +32,7 @@ class Client extends CI_Controller {
         echo json_encode(['status' => true]);
     }
 
-    public function get_student($id) {
+    public function get_client($id) {
         $data = $this->client_model->get_client($id);
         echo json_encode($data);
     }
