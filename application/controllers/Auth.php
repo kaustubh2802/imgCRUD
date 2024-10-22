@@ -83,6 +83,7 @@ class Auth extends CI_Controller {
                     'username' => $client->username,
                     'email' => $client->email,
                     'password' => $client->password,
+                    'photo' => $client->photo,
                 ));
 
                 // Return a success response
