@@ -4,47 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <?php require('navbar.php');?>
-    
+
+    <!-- Include jQuery for AJAX handling -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+   
 </head>
 <body>
-    <!-- <h2>Login</h2>
-    < ?php if(isset($error)) { echo '<p style="color:red;">' . $error . '</p>'; } ?>
+    <h2>Login</h2>
+    <p id="error" style="color:red;"></p>
 
-    <form action="< ?php echo base_url('auth/login'); ?>" method="post">
+    <form id="loginForm">
         <label for="username">Username:</label>
-        <input type="text" name="username" required><br>
+        <input type="text" id="username" name="username" required><br>
 
         <label for="password">Password:</label>
-        <input type="password" name="password" required><br>
+        <input type="password" id="password" name="password" required><br>
 
-        <input type="submit" name="submit" value="Login">
-    </form> -->
-<!-- </body>
-</html> -->
-
-
-<div class="container mt-3 p-5 bg-warning">
-    <form action="<?php echo base_url('auth/login'); ?>" method="post"> 
-    <div class="mb-3">
-    <h2>Login</h2>
-    <?php if(isset($error)) { echo '<p style="color:red;">' . $error . '</p>'; } ?>
-
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-    </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary" name="submit" value="Login">Submit</button>
+        <button type="submit">Login</button>
     </form>
-</div>
 
+
+
+
+
+
+    <script type="text/javascript">
+       
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault(); // Prevent form submission
+                
+                // Get the form data
+                var username = $('#username').val();
+                var password = $('#password').val();
+// alert(username);
+                // AJAX call to send the login details
+                $.ajax({
+                    url: '<?php echo base_url('Auth/login'); ?>',
+                    type: 'POST',
+                    data: { username: username, password: password },
+                    success: function(response) {
+                       
+                            // If login is successful, redirect to dashboard
+                     //   alert(username);
+                            window.location.href = '<?php echo base_url('dashboard'); ?>';
+                        
+                    },
+                    error: function() {
+                        // Handle error
+                        $('#error').text('An error occurred, please try again.');
+                    }
+                });
+            });
+      
+    </script>
 </body>
 </html>
+
+
