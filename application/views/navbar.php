@@ -31,8 +31,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url('Student/index'); ?>">Student CRUD</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url('client/index'); ?>">Client CRUD</a>
+                <li class="nav-item bg-danger">
+                    <a class="nav-link text-dark" href="<?php echo base_url('auth/login'); ?>">Login</a>
+                </li>
+                <li class="nav-item bg-warning">
+                    <a class="nav-link text-dark" href="<?php echo base_url('client/index'); ?>">Register Client</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
